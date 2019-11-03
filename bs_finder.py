@@ -40,7 +40,7 @@ class BSFinder(LearnerCallback):
       self.n_batch = n_batch 
       self.beta = beta
 
-  def on_train_begin(self, pbar, **kwargs:Any)->None:
+  def on_train_begin(self, pbar, **kwargs)->None:
       "Setup the running averages and the output list"
 
       setattr(pbar, 'clean_on_interrupt', True)
@@ -56,7 +56,7 @@ class BSFinder(LearnerCallback):
 
       return {'skip_validate': True}
 
-  def on_backward_end(self, iteration:int, **kwargs:Any)->None:
+  def on_backward_end(self, iteration:int, **kwargs)->None:
 
       if iteration >= self.num_it:
         return {'stop_epoch': True, 'stop_training': True}
@@ -89,7 +89,7 @@ class BSFinder(LearnerCallback):
         
         self.output.append({"noise":noise,"scale":scale,"noise_scale":noise_scale})
 
-  def on_train_end(self, **kwargs:Any)->None:
+  def on_train_end(self, **kwargs)->None:
       "Cleanup learn model weights disturbed during exploration."
       self.learn.load('tmp', purge=False)
       if hasattr(self.learn.model, 'reset'): self.learn.model.reset()
